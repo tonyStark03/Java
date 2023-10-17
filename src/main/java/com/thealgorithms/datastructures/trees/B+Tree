@@ -1,0 +1,128 @@
+import java.util.ArrayList;
+
+class BPlusTree {
+    private BPlusNode root;
+    private int degree;
+
+    public BPlusTree(int degree) {
+        this.root = new BPlusLeafNode();
+        this.degree = degree;
+    }
+
+    public void insert(int key, String value) {
+        root.insert(key, value);
+        if (root.isOverflow()) {
+            BPlusNode newRoot = new BPlusInternalNode();
+            newRoot.addChild(root.split());
+            root.setParent(newRoot);
+            root = newRoot;
+        }
+    }
+
+    public String search(int key) {
+        return root.search(key);
+    }
+}
+
+abstract class BPlusNode {
+    int[] keys;
+    BPlusNode[] children;
+    int numKeys;
+    BPlusNode parent;
+
+    abstract void insert(int key, String value);
+
+    abstract String search(int key);
+
+    abstract boolean isOverflow();
+
+    abstract BPlusNode split();
+}
+
+class BPlusInternalNode extends BPlusNode {
+    BPlusInternalNode() {
+        this.keys = new int[degree];
+        this.children = new BPlusNode[degree + 1];
+        this.numKeys = 0;
+    }
+
+    @Override
+    void insert(int key, String value) {
+        // Implement insertion logic for internal node
+    }
+
+    @Override
+    String search(int key) {
+        // Implement search logic for internal node
+        return null;
+    }
+
+    @Override
+    boolean isOverflow() {
+        return numKeys == degree;
+    }
+
+    @Override
+    BPlusNode split() {
+        // Implement split logic for internal node
+        return null;
+    }
+
+    void addChild(BPlusNode child) {
+        children[numKeys + 1] = child;
+        numKeys++;
+    }
+
+    void setKey(int index, int key) {
+        keys[index] = key;
+    }
+
+    void setParent(BPlusNode parent) {
+        this.parent = parent;
+    }
+}
+
+class BPlusLeafNode extends BPlusNode {
+    ArrayList<String> values;
+
+    BPlusLeafNode() {
+        this.keys = new int[degree];
+        this.values = new ArrayList<>(degree);
+        this.numKeys = 0;
+    }
+
+    @Override
+    void insert(int key, String value) {
+        // Implement insertion logic for leaf node
+    }
+
+    @Override
+    String search(int key) {
+        // Implement search logic for leaf node
+        return null;
+    }
+
+    @Override
+    boolean isOverflow() {
+        return numKeys == degree;
+    }
+
+    @Override
+    BPlusNode split() {
+        // Implement split logic for leaf node
+        return null;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        BPlusTree bPlusTree = new BPlusTree(3); // Adjust the degree as needed
+
+        bPlusTree.insert(1, "One");
+        bPlusTree.insert(2, "Two");
+        bPlusTree.insert(3, "Three");
+        bPlusTree.insert(4, "Four");
+
+        System.out.println(bPlusTree.search(2)); // Should print "Two"
+    }
+}
